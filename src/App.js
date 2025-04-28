@@ -1,25 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
+import Home from './pages/Home';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import AppProvider from './context/Provider';
+import { useContext } from 'react';
+import AppContext from './context/context';
 
-function App() {
+
+const AppRoutes = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route
+        path="/dashboard"
+        element={user ? <Dashboard /> : <Navigate to="/" />}
+      />
+    </Routes>
   );
-}
+};
+
+const App = () => (
+  <AppProvider>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  </AppProvider>
+);
 
 export default App;
